@@ -77,6 +77,7 @@ void vTaskUART(void* pvParameters)
 			TransmitData(buffer, size);
 			}
 		vTaskSuspend(UART);
+		vTaskDelay(200);
 		}
 	}
 

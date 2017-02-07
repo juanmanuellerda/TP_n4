@@ -123,7 +123,7 @@ void SW_Init(void) {
 
 void EXTI4_IRQHandler(void)
 {
-	retardo();
+	//retardo();
 	static uint16_t identifier_SW1 = 3;
 	Manager_Resume(taskManager);
 	ISR(identifier_SW1);
@@ -132,7 +132,7 @@ void EXTI4_IRQHandler(void)
 
 void EXTI2_IRQHandler(void)
 {
-	retardo();
+	//retardo();
 	static uint16_t identifier_SW4 = 0;
 	function_IRQHANDLER(identifier_SW4);
 
@@ -140,7 +140,7 @@ void EXTI2_IRQHandler(void)
 
 void EXTI9_5_IRQHandler(void)
 {
-	retardo();
+	//retardo();
 	static uint16_t identifier_SW2 = 1;
 	function_IRQHANDLER(identifier_SW2);
 
@@ -239,7 +239,7 @@ void BSP_Init(void) {
 }
 
 
-void retardo (void)
+/*void retardo (void)
 	{
 	for(int x = 0; x < 30; x++)
 		{
@@ -247,4 +247,4 @@ void retardo (void)
 			{
 			}
 		}
-	}
+	}*/
