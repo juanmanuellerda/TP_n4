@@ -54,7 +54,6 @@ void LedOff(leds_Typedef led);
 void LedClear(void);
 void TransmitData(uint16_t *buffer, uint16_t size);
 
-//void retardo (void);
 
 
 #endif /* BSPTP4_BSP_H_ */

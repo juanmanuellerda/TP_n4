@@ -19,7 +19,7 @@ void vTask4 (void *Parameters);
 void vTaskManager(void *Parameters);
 void vTaskUART(void* pvParameters);
 
-void function_aux (leds_Typedef leds_exp);
+//void function_aux (leds_Typedef leds_exp);
 QueueHandle_t buttonPushesQueue = NULL;
 QueueHandle_t xQueue1;
 TaskHandle_t tasks[5],taskManager, UART;
@@ -59,25 +59,24 @@ int main(void)
 void vTaskUART(void* pvParameters)
 	{
 	(void) pvParameters;                    // Just to stop compiler warnings.
-	char msg;
+	char msg = '1';
 	char buffer[150];
 	uint16_t size;
 
-	size = sprintf(buffer, "\nIniciando....\r\n");
+	size = sprintf(buffer, "\nIniciando....\r\n\nPatrón actual: %c\nVelocidad actual: %d mseg.\n", msg, ms);
 	TransmitData(buffer, size);
+	vTaskDelay(300);
 
 	for (;;)
 
 		{
 		if(xQueueReceive( xQueue1, &msg, portMAX_DELAY))
 			{
-			size = sprintf(buffer, "\nPatrón actual: %c\n", msg);
-			TransmitData(buffer, size);
-			size = sprintf(buffer, "Velocidad actual: %d mseg.\n", ms);
+			size = sprintf(buffer, "\nPatrón actual: %c\n Velocidad actual: %d mseg.\n", msg, ms);
 			TransmitData(buffer, size);
 			}
 		vTaskSuspend(UART);
-		vTaskDelay(200);
+		vTaskDelay(300);
 		}
 	}
 
@@ -169,7 +168,11 @@ void vTask1 (void *Parameters)
 	for(;;)
 		{
 		for (leds_exp=LED1_EXP; leds_exp<= LED8_EXP; leds_exp++)
-			function_aux(leds_exp);
+			{
+			LedOn(leds_exp);
+			vTaskDelay(ms);
+			LedOff(leds_exp);
+			}
 		}
 	}
 
@@ -177,11 +180,23 @@ void vTask2 (void *Parameters)
 	{
 	for(;;)
 		{
-		for (leds_exp=LED8_EXP; leds_exp >= LED1_EXP; leds_exp--)
+		for (leds_exp=LED1_EXP; leds_exp<= LED8_EXP; leds_exp++)
 			{
-			function_aux(leds_exp);
-			if(leds_exp==0)
-				leds_exp=LED8_EXP;
+			LedOn(leds_exp);
+			vTaskDelay(ms);
+			if(leds_exp == 8)
+				{
+				LedOn(1);
+				vTaskDelay(70);
+				LedOff(1);
+				}
+			else
+				{
+				LedOn(leds_exp + 1);
+				vTaskDelay(70);
+				LedOff(leds_exp + 1);
+				}
+			LedOff(leds_exp);
 			}
 		}
 	}
@@ -190,37 +205,44 @@ void vTask3 (void *Parameters)
 	{
 	for(;;)
 		{
-		for (leds_exp=LED1_EXP; leds_exp<= LED7_EXP; leds_exp+=2)
-			function_aux(leds_exp);
-
-		for (leds_exp=LED8_EXP; leds_exp>= LED2_EXP; leds_exp-=2)
-			function_aux(leds_exp);
-		}
+		for (leds_exp=LED8_EXP; leds_exp >= LED1_EXP; leds_exp--)
+			{
+			LedOn(leds_exp);
+			vTaskDelay(ms);
+			LedOff(leds_exp);
+			}
+			if(leds_exp==0)
+				leds_exp=LED8_EXP;
+			}
 	}
 
 void vTask4 (void *Parameters)
 	{
 	for(;;)
 		{
-		for (uint8_t i=0 ; i<4 ; i++)
+		for (leds_exp=LED8_EXP; leds_exp >= LED1_EXP; leds_exp--)
 			{
-			LedOn(top);
-			LedOn(bottom);
+			LedOn(leds_exp);
 			vTaskDelay(ms);
-			LedOff(top);
-			LedOff(bottom);
-			top++;
-			bottom--;
+
+			if(leds_exp == 8)
+				{
+				LedOn(1);
+				vTaskDelay(70);
+				LedOff(1);
+				leds_exp=LED8_EXP;
+				}
+			else
+				{
+				LedOn(leds_exp + 1);
+				vTaskDelay(70);
+				LedOff(leds_exp + 1);
+				}
+			LedOff(leds_exp);
 			}
-		top=LED1_EXP;
-		bottom=LED8_EXP;
 		}
 	}
 
-void function_aux (leds_Typedef leds_exp)
-	{
-	LedOn(leds_exp);
-	vTaskDelay(ms);
-	LedOff(leds_exp);
-	}
+
+
 

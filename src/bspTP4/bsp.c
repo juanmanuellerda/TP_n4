@@ -80,7 +80,7 @@ void LED_Init(void) {
 		LED_Init.Mode = GPIO_MODE_OUTPUT_PP;
 		LED_Init.Pull = GPIO_NOPULL;
 		LED_Init.Speed = GPIO_SPEED_FAST;
-		//LED_Init.Pin = ALL_LEDS;
+		LED_Init.Pin = ALL_LEDS;
 		HAL_GPIO_Init(LEDS_PORT, &LED_Init);
 }
 
@@ -123,7 +123,6 @@ void SW_Init(void) {
 
 void EXTI4_IRQHandler(void)
 {
-	//retardo();
 	static uint16_t identifier_SW1 = 3;
 	Manager_Resume(taskManager);
 	ISR(identifier_SW1);
@@ -132,7 +131,6 @@ void EXTI4_IRQHandler(void)
 
 void EXTI2_IRQHandler(void)
 {
-	//retardo();
 	static uint16_t identifier_SW4 = 0;
 	function_IRQHANDLER(identifier_SW4);
 
@@ -140,7 +138,6 @@ void EXTI2_IRQHandler(void)
 
 void EXTI9_5_IRQHandler(void)
 {
-	//retardo();
 	static uint16_t identifier_SW2 = 1;
 	function_IRQHANDLER(identifier_SW2);
 
@@ -239,12 +236,3 @@ void BSP_Init(void) {
 }
 
 
-/*void retardo (void)
-	{
-	for(int x = 0; x < 30; x++)
-		{
-		for(uint16_t y = 0; y < 65000; y++)
-			{
-			}
-		}
-	}*/
